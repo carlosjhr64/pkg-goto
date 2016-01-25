@@ -5,26 +5,31 @@
 #   Options
 #
 
-function _goto_resets
-  # Bin or Not
-  if test -e ./bin
-    if test "$PATH[1]" != "./bin"
-      set -gx PATH ./bin $PATH
-    end
-    if test -e ./lib
-      if test "$RUBYLIB[1]" != "./lib"
-        set -gx RUBYLIB ./lib $RUBYLIB
-      end
-    end
-  else
-    if test "$PATH[1]" = "./bin"
-      set -e PATH[1]
-    end
-    if test "$RUBYLIB[1]" = "./lib"
-      set -e RUBYLIB[1]
-    end
+function _shift_bin
+  if test "$PATH[1]" != "./bin"
+    set -gx PATH ./bin $PATH
   end
-  # Theme or Default
+end
+
+function _unshift_bin
+  if test "$PATH[1]" = "./bin"
+    set -e PATH[1]
+  end
+end
+
+function _shift_lib
+  if test "$RUBYLIB[1]" != "./lib"
+    set -gx RUBYLIB ./lib $RUBYLIB
+  end
+end
+
+function _unshift_lib
+  if test "$RUBYLIB[1]" = "./lib"
+    set -e RUBYLIB[1]
+  end
+end
+
+function _reset_theme
   if test -e .theme
     omf theme (cat .theme)
   else
@@ -36,41 +41,67 @@ function _goto_resets
   end
 end
 
-function goto -d 'cd (find ~/ -type d -name "$argv[1]")'
+function _goto_resets
+  if test -e ./bin
+    _shift_bin
+    if test -e ./lib
+      _shift_lib
+    else
+      _unshift_lib
+    end
+  else
+    _unshift_bin
+    _unshift_lib
+  end
+  _reset_theme
+end
+
+function _depth
+  echo (echo "$argv[1]" | grep -o '/' | wc -l)
+end
+
+function _deepest_path
+  set -l d ''
+  set -l n 0
+  for a in $argv
+    echo "#?$a" >&2
+    set -l m (_depth $a)
+    if test $m -gt $n
+      set n $m
+      set d $a
+    end
+  end
+  echo $d
+end
+
+function _goto_finds
   # vars
   set -l d ~/
-  set -l n 0
   # loop
   for a in $argv
     set d (find $d -maxdepth 3 -type d -name "$a" ^ /dev/null)
-    set n (count $d)
-    if test $n -gt 1
-      break
+    if test (count $d) -gt 1
+      set d (_deepest_path $d)
     end
     if test -z "$d"
       break
     end
   end
+  echo $d
+end
+
+function goto -d 'cd (find ~/ -type d -name "$argv[1]")'
+  set -l d (_goto_finds $argv)
   if test -n "$d"
-    if test $n -gt 1
-      echo "# $d[1]"
-      echo "# $d[2]"
-      if test $n -gt 2
-        echo "# ..."
-      end
-      echo "# Multiple directories found."
-      false
+    if builtin cd $d[1]
+      echo "#" (pwd)
+      _goto_resets
+      true
     else
-      if builtin cd $d[1]
-        echo "#" (pwd)
-        _goto_resets
-        true
-      else
-        # Very unlikely, but maybe did not have permission to enter.
-        echo "# $d[1]"
-        echo "# Could not cd."
-        false
-      end
+      # Very unlikely, but maybe did not have permission to enter.
+      echo "# $d[1]"
+      echo "# Could not cd."
+      false
     end
   else
     echo "# Directory not found."
