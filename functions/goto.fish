@@ -90,8 +90,12 @@ function goto -d 'cd (find ~/ -type d -name "$argv[1]")'
   set -l d (_goto_finds $argv)
   if test -n "$d"
     if builtin cd $d[1]
-      echo "#" (pwd)
       _goto_resets
+      if test -e .greeting
+        cat .greeting
+      else
+        echo "#" (pwd)
+      end
       true
     else
       # Very unlikely, but maybe did not have permission to enter.
