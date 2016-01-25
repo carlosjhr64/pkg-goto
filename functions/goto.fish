@@ -1,9 +1,5 @@
 # SYNOPSIS
-#   goto [options]
-#
-# USAGE
-#   Options
-#
+#   goto <basename> [<basename>...]
 
 function _shift_bin
   if test "$PATH[1]" != "./bin"
