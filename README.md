@@ -39,14 +39,16 @@ it shifts out ./lib from RUBYLIB.
 Finally, if it finds a .theme file, it set the omf theme to that specified in the file, else
 it sets the theme to `$default_theme`.
 
-For directories deeper than depth 3, say ~/a/b/c/d/e/f,
-one can iterate down as long as each search yields a unique directory:
+For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
 
 ```fish
 ⋊> ~ goto c f                           16:25:36
  # /home/user/a/b/c/d/f
 ⋊> ~/a/b/c/d/f                          16:25:38
 ```
+
+If a given basename yields multiple directories,
+"goto" will pick the first deepest directory it finds.
 
 # Screenshot
 
