@@ -56,13 +56,14 @@ function _depth
   echo (echo "$argv[1]" | grep -o '/' | wc -l)
 end
 
-function _deepest_path
-  set -l d ''
-  set -l n 0
-  for a in $argv
+function _shallow_path
+  set -l d $argv[1]
+  set -l n (_depth $d)
+  echo "#?$d" >&2
+  for a in $argv[2..-1]
     echo "#?$a" >&2
     set -l m (_depth $a)
-    if test $m -gt $n
+    if test $m -lt $n
       set n $m
       set d $a
     end
@@ -77,7 +78,7 @@ function _goto_finds
   for a in $argv
     set d (find $d -maxdepth 3 -type d -name "$a" ^ /dev/null)
     if test (count $d) -gt 1
-      set d (_deepest_path $d)
+      set d (_shallow_path $d)
     end
     if test -z "$d"
       break

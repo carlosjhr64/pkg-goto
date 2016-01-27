@@ -48,7 +48,7 @@ For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
 ```
 
 If a given basename yields multiple directories,
-"goto" will pick the first deepest directory it finds.
+"goto" will pick the first shallowest directory it finds.
 
 Lastly, if a .greeting file is found, it will display it's content.
 
