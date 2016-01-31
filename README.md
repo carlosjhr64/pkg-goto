@@ -11,14 +11,9 @@
 
 ## Install
 
-If registered, one should be able to run the following:
-
 ```fish
-$ omf install goto
+$ omf install https://github.com/carlosjhr64/pkg-goto
 ```
-
-Otherwise, cloning this git to ~/.config/omf/pkg/goto should work.
-
 ## Usage
 
 ```fish
@@ -36,7 +31,7 @@ if it finds a ./bin directory, it prepends ./bin to PATH, else
 it shifts out ./bin from PATH.
 Likewise, if it finds a ./lib directory, it prepends ./lib to RUBYLIB, else
 it shifts out ./lib from RUBYLIB.
-Finally, if it finds a .theme file, it set the omf theme to that specified in the file, else
+Finally, if it finds a .theme file, it sets the omf theme to that specified in the file, else
 it sets the theme to `$default_theme`.
 
 For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
