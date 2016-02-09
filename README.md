@@ -11,13 +11,14 @@ fisher install https://github.com/carlosjhr64/pkg-goto
 ## Usage
 
 ```fish
-⋊> ~ goto <basename> [<basename>...]
+~> goto <basename> [<basename>...]
+basename>
 ```
 
 In a nutshell, it just runs the following command:
 
 ```fish
-⋊> ~ cd (find ~/ -maxdepth 3 -type d -name "$argv[1]")
+~> cd (find ~/ -maxdepth 3 -type d -name "$argv[1]")
 ```
 
 But wait, there's more!  After it changes directory,
@@ -31,9 +32,9 @@ it sets the theme to `$default_theme`.
 For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
 
 ```fish
-⋊> ~ goto c f                           16:25:36
+~>goto c f                           16:25:36
  # /home/user/a/b/c/d/f
-⋊> ~/a/b/c/d/f                          16:25:38
+~/a/b/c/d/f>                         16:25:38
 ```
 
 If a given basename yields multiple directories,
