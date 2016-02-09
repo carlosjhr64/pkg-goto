@@ -50,4 +50,4 @@ Lastly, if a .greeting file is found, it will display it's content.
 
 # License
 
-(MIT)[http://opensource.org/licenses/MIT] © CarlosJHR64
+[MIT](http://opensource.org/licenses/MIT) © CarlosJHR64
