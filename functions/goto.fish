@@ -27,12 +27,10 @@ end
 
 function _reset_theme
   if test -e .theme
-    omf theme (cat .theme)
-  else
-    if test -z "$default_theme"
-      omf theme default
-    else
-      omf theme "$default_theme"
+    set -l a (cat .theme)
+    set -l b (fisher --list=theme)
+    if test "$a" != "$b"
+      fisher install "$a" -f
     end
   end
 end
