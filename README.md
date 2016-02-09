@@ -26,8 +26,8 @@ if it finds a ./bin directory, it prepends ./bin to PATH, else
 it shifts out ./bin from PATH.
 Likewise, if it finds a ./lib directory, it prepends ./lib to RUBYLIB, else
 it shifts out ./lib from RUBYLIB.
-Finally, if it finds a .theme file, it sets the omf theme to that specified in the file, else
-it sets the theme to `$default_theme`.
+Finally, if it finds a .theme file, it sets the fisherman theme to that specified in the file
+(unless already set to it).
 
 For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
 
