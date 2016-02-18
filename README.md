@@ -15,7 +15,7 @@ fisher install https://github.com/carlosjhr64/pkg-goto
 * Automatically add `./lib` to `RUBYLIB` when present.
 * Automatically set `GOPATH` when `./bin`, `./pkg`, and `./src` are present.
 * Automatically switch themes by hidden `.theme` file.
-* Autoamtically give greeting by hidden `.greeting` file.
+* Automatically give greeting by hidden `.greeting` file.
 
 ## Usage
 
