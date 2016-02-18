@@ -121,7 +121,25 @@ function _goto_finds
   echo $d
 end
 
+function _cmdflags
+  set -l n (count $argv)
+  if test "$n" != '0'
+    switch $argv[1]
+      case '-v' '--version'
+        echo '0.0.0'
+        return 0
+      case '-h' '--help'
+        echo 'Usage: goto <basename>...'
+        return 0
+    end
+  end
+  return 1
+end
+
 function goto -d 'cd (find ~/ -type d -name "$argv[1]")'
+  if _cmdflags $argv
+    return
+  end
   set -l d (_goto_finds $argv)
   if test -n "$d"
     if builtin cd $d[1]
