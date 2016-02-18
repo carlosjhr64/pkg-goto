@@ -8,6 +8,15 @@ A plugin for [Fisherman](http://fisherman.sh).
 fisher install https://github.com/carlosjhr64/pkg-goto
 ```
 
+## Features
+
+* Quickly change directory by basename.
+* Automatically add `./bin` to `PATH` when present.
+* Automatically add `./lib` to `RUBYLIB` when present.
+* Automatically set `GOPATH` when `./bin`, `./pkg`, and `./src` are present.
+* Automatically switch themes by hidden `.theme` file.
+* Autoamtically give greeting by hidden `.greeting` file.
+
 ## Usage
 
 ```fish
@@ -26,6 +35,7 @@ if it finds a ./bin directory, it prepends ./bin to PATH, else
 it shifts out ./bin from PATH.
 Likewise, if it finds a ./lib directory, it prepends ./lib to RUBYLIB, else
 it shifts out ./lib from RUBYLIB.
+If it finds ./bin, ./pkg, and ./src, it sets GOPATH to the directory path.
 Finally, if it finds a .theme file, it sets the fisherman theme to that specified in the file
 (unless already set to it).
 
