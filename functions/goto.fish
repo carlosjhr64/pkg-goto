@@ -35,17 +35,53 @@ function _reset_theme
   end
 end
 
-function _goto_resets
+function _blp
+  set -l blp '0' '0' '0'
   if test -e ./bin
-    _shift_bin
+    set blp[1] '1'
     if test -e ./lib
-      _shift_lib
-    else
-      _unshift_lib
+      set blp[2] '1'
     end
+    if test -e ./src
+      if test -e ./pkg
+        set blp[3] '1'
+      end
+    end
+  end
+  echo $blp[1]
+  echo $blp[2]
+  echo $blp[3]
+end
+
+function _reset_gopath
+  if test -n "$gopath"
+    set GOPATH $gopath
+  end
+end
+
+function _set_gopath
+  if test -z "$gopath"
+    set -g gopath $GOPATH
+  end
+  set -x GOPATH (pwd)
+end
+
+function _goto_resets
+  set -l blp (_blp)
+  if test "$blp[1]" = '1'
+    _shift_bin
   else
     _unshift_bin
+  end
+  if test "$blp[2]" = '1'
+    _shift_lib
+  else
     _unshift_lib
+  end
+  if test "$blp[3]" = '1'
+    _set_gopath
+  else
+    _reset_gopath
   end
   _reset_theme
 end
