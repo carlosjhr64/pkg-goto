@@ -28,9 +28,9 @@ end
 function _reset_theme
   if test -e .theme
     set -l a (cat .theme)
-    set -l b (fisher --list=theme)
+    set -l b (fisher ls)
     if test "$a" != "$b"
-      fisher install "$a" -f
+      fisher "$a" -q
     end
   end
 end

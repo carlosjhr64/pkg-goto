@@ -5,7 +5,7 @@ A plugin for [Fisherman](http://fisherman.sh).
 ## Install
 
 ```fish
-fisher install https://github.com/carlosjhr64/pkg-goto
+fisher install carlosjhr64/pkg-goto
 ```
 
 ## Features
