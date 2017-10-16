@@ -126,7 +126,7 @@ function _cmdflags
   if test "$n" != '0'
     switch $argv[1]
       case '-v' '--version'
-        echo '0.0.0'
+        echo '0.0.1'
         return 0
       case '-h' '--help'
         echo 'Usage: goto <basename>...'
