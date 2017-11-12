@@ -1,30 +1,6 @@
 # SYNOPSIS
 #   goto <basename> [<basename>...]
 
-function _shift_bin
-  if test "$PATH[1]" != "./bin"
-    set -gx PATH ./bin $PATH
-  end
-end
-
-function _unshift_bin
-  if test "$PATH[1]" = "./bin"
-    set -e PATH[1]
-  end
-end
-
-function _shift_lib
-  if test "$RUBYLIB[1]" != "./lib"
-    set -gx RUBYLIB ./lib $RUBYLIB
-  end
-end
-
-function _unshift_lib
-  if test "$RUBYLIB[1]" = "./lib"
-    set -e RUBYLIB[1]
-  end
-end
-
 function _reset_theme
   if test -e .theme
     set -l a (cat .theme)
@@ -33,57 +9,6 @@ function _reset_theme
       fisher "$a" -q
     end
   end
-end
-
-function _blp
-  set -l blp '0' '0' '0'
-  if test -e ./bin
-    set blp[1] '1'
-    if test -e ./lib
-      set blp[2] '1'
-    end
-    if test -e ./src
-      if test -e ./pkg
-        set blp[3] '1'
-      end
-    end
-  end
-  echo $blp[1]
-  echo $blp[2]
-  echo $blp[3]
-end
-
-function _reset_gopath
-  if test -n "$gopath"
-    set GOPATH $gopath
-  end
-end
-
-function _set_gopath
-  if test -z "$gopath"
-    set -g gopath $GOPATH
-  end
-  set -x GOPATH (pwd)
-end
-
-function _goto_resets
-  set -l blp (_blp)
-  if test "$blp[1]" = '1'
-    _shift_bin
-  else
-    _unshift_bin
-  end
-  if test "$blp[2]" = '1'
-    _shift_lib
-  else
-    _unshift_lib
-  end
-  if test "$blp[3]" = '1'
-    _set_gopath
-  else
-    _reset_gopath
-  end
-  _reset_theme
 end
 
 function _depth
@@ -126,7 +51,7 @@ function _cmdflags
   if test "$n" != '0'
     switch $argv[1]
       case '-v' '--version'
-        echo '0.0.1'
+        echo '0.1.0'
         return 0
       case '-h' '--help'
         echo 'Usage: goto <basename>...'
@@ -143,7 +68,7 @@ function goto -d 'cd (find ~/ -type d -name "$argv[1]")'
   set -l d (_goto_finds $argv)
   if test -n "$d"
     if builtin cd $d[1]
-      _goto_resets
+      _reset_theme
       if test -e .greeting
         cat .greeting
       else

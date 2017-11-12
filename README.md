@@ -11,9 +11,6 @@ fisher install carlosjhr64/pkg-goto
 ## Features
 
 * Quickly change directory by basename.
-* Automatically add `./bin` to `PATH` when present.
-* Automatically add `./lib` to `RUBYLIB` when present.
-* Automatically set `GOPATH` when `./bin`, `./pkg`, and `./src` are present.
 * Automatically switch themes by hidden `.theme` file.
 * Automatically give greeting by hidden `.greeting` file.
 
@@ -30,15 +27,6 @@ In a nutshell, it just runs the following command:
 ~> cd (find ~/ -maxdepth 3 -type d -name "$argv[1]")
 ```
 
-But wait, there's more!  After it changes directory,
-if it finds a ./bin directory, it prepends ./bin to PATH, else
-it shifts out ./bin from PATH.
-Likewise, if it finds a ./lib directory, it prepends ./lib to RUBYLIB, else
-it shifts out ./lib from RUBYLIB.
-If it finds ./bin, ./pkg, and ./src, it sets GOPATH to the directory path.
-Finally, if it finds a .theme file, it sets the fisherman theme to that specified in the file
-(unless already set to it).
-
 For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
 
 ```fish
@@ -48,15 +36,23 @@ For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
 ```
 
 If a given basename yields multiple directories,
-"goto" will pick the first shallowest directory it finds.
+`goto` will pick the first shallowest directory it finds.
 
-Lastly, if a .greeting file is found, it will display it's content.
+If `goto` finds a `.theme` file,
+it sets the fisherman theme to that specified in the file
+(unless already set to it).
+And if a `.greeting` file is found, it will display it's content.
 
 # Screenshot
 
 <p align="center">
 <img src="goto.png">
 </p>
+
+# This version 0.1.0 vs. the previous version 0.0.1
+
+The previous version automated the PATH, RUBYLIB, and GOPATH maintainance, but
+I decided that was giving `goto` to many responsibilities.
 
 # License
 
