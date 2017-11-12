@@ -12,7 +12,7 @@ fisher install carlosjhr64/pkg-goto
 
 * Quickly change directory by basename.
 * Automatically switch themes by hidden `.theme` file.
-* Automatically give greeting by hidden `.greeting` file.
+* Runs `fish_greeting` on succesfully going to the directory.
 
 ## Usage
 
@@ -49,7 +49,12 @@ And if a `.greeting` file is found, it will display it's content.
 <img src="goto.png">
 </p>
 
-# This version 0.1.0 vs. the previous version 0.0.1
+# Version 0.2.0 vs. the previous version 0.1.0
+
+The previous version just `cat .greeting` if a `.greeting` file was found, but
+I decided that calling `fish_greeting` would be more universal and useful.
+
+# Version 0.1.0 vs. the previous version 0.0.1
 
 The previous version automated the PATH, RUBYLIB, and GOPATH maintainance, but
 I decided that was giving `goto` to many responsibilities.

@@ -51,7 +51,7 @@ function _cmdflags
   if test "$n" != '0'
     switch $argv[1]
       case '-v' '--version'
-        echo '0.1.0'
+        echo '0.2.0'
         return 0
       case '-h' '--help'
         echo 'Usage: goto <basename>...'
@@ -68,12 +68,9 @@ function goto -d 'cd (find ~/ -type d -name "$argv[1]")'
   set -l d (_goto_finds $argv)
   if test -n "$d"
     if builtin cd $d[1]
+      echo "#"(pwd) >&2
       _reset_theme
-      if test -e .greeting
-        cat .greeting
-      else
-        echo "#" (pwd)
-      end
+      fish_greeting
       true
     else
       # Very unlikely, but maybe did not have permission to enter.
