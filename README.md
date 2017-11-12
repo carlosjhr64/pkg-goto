@@ -41,7 +41,7 @@ If a given basename yields multiple directories,
 If `goto` finds a `.theme` file,
 it sets the fisherman theme to that specified in the file
 (unless already set to it).
-And if a `.greeting` file is found, it will display it's content.
+It then runs `fish_greeting`.
 
 # Screenshot
 
