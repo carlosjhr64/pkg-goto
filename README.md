@@ -1,6 +1,6 @@
 # pkg-goto
 
-A plugin for [Fisherman](http://fisherman.sh).
+A plugin for [Fisherman](https://fisherman.github.io/).
 
 ## Install
 
