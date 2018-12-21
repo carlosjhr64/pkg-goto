@@ -1,27 +1,20 @@
-# SYNOPSIS
-#   goto <basename> [<basename>...]
-
-function _reset_theme
-  if test -e .theme
-    set -l a (cat .theme)
-    set -l b (fisher ls)
-    if test "$a" != "$b"
-      fisher "$a" -q
-    end
+function pkg-goto_trace
+  if test -n "$pkg_goto_trace"
+    echo "$argv[1]" >&2
   end
 end
 
-function _depth
+function pkg-goto_depth
   echo (echo "$argv[1]" | grep -o '/' | wc -l)
 end
 
-function _shallow_path
+function pkg-goto_shallow_path
   set -l d $argv[1]
-  set -l n (_depth $d)
-  echo "#?$d" >&2
+  set -l n (pkg-goto_depth $d)
+  pkg-goto_trace "#?$d"
   for a in $argv[2..-1]
-    echo "#?$a" >&2
-    set -l m (_depth $a)
+    pkg-goto_trace "#?$a"
+    set -l m (pkg-goto_depth $a)
     if test $m -lt $n
       set n $m
       set d $a
@@ -30,14 +23,12 @@ function _shallow_path
   echo $d
 end
 
-function _goto_finds
-  # vars
+function pkg-goto_goto_finds
   set -l d ~/
-  # loop
   for a in $argv
     set d (find $d -maxdepth 3 -type d -name "$a" ^ /dev/null)
     if test (count $d) -gt 1
-      set d (_shallow_path $d)
+      set d (pkg-goto_shallow_path $d)
     end
     if test -z "$d"
       break
@@ -46,40 +37,50 @@ function _goto_finds
   echo $d
 end
 
-function _cmdflags
-  set -l n (count $argv)
-  if test "$n" != '0'
-    switch $argv[1]
-      case '-v' '--version'
-        echo '0.2.0'
-        return 0
-      case '-h' '--help'
-        echo 'Usage: goto <basename>...'
-        return 0
-    end
-  end
-  return 1
-end
-
-function goto -d 'cd (find ~/ -type d -name "$argv[1]")'
-  if _cmdflags $argv
-    return
-  end
-  set -l d (_goto_finds $argv)
+function pkg-goto_found
+  set -l d (pkg-goto_goto_finds $argv)
   if test -n "$d"
     if builtin cd $d[1]
-      echo "#"(pwd) >&2
-      _reset_theme
-      fish_greeting
-      true
+      pkg-goto_trace "#"(pwd)
+      if functions -q fish_greeting
+        fish_greeting
+      end
+      return 0
     else
       # Very unlikely, but maybe did not have permission to enter.
-      echo "# $d[1]"
-      echo "# Could not cd."
-      false
+      echo "# $d[1]" >&2
+      echo "# Could not cd." >&2
+      return 1
     end
   else
-    echo "# Directory not found."
+    echo "# Directory not found." >&2
+    return 1
+  end
+end
+
+function goto
+  set -g pkg_goto_trace ''
+  set -l error ''
+  if argparse --name=goto 'h/help' 'v/version' 't/trace' -- $argv
+    if test -n "$_flag_version"
+      echo '1.0.0'
+    else if test -n "$_flag_help"
+      echo 'Usage: goto [-t --trace] <basename>...'
+    else
+      if test -n "$_flag_trace"
+        set pkg_goto_trace '1'
+      end
+      if not pkg-goto_found $argv
+        set error '1'
+      end
+    end
+  else
+    set error '1'
+  end
+  set -e pkg_goto_trace
+  if test -n "$error"
     false
+  else
+    true
   end
 end
