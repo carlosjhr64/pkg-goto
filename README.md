@@ -15,18 +15,9 @@ A plugin for [Fisherman](https://github.com/jorgebucaran/fisher) version v3.
 
     ~> goto <basename> [<basename>...]
 
-In a nutshell, it's like running the following command:
-
-    ~> cd (find ~/ -maxdepth 3 -type d -name "$argv[1]")
-
-For directories deeper than depth 3, say ~/a/b/c/d/e/f, one can iterate down:
-
-    ~>goto c f                           16:25:36
-     # /home/user/a/b/c/d/f
-    ~/a/b/c/d/f>                         16:25:38
-
-If a given basename yields multiple directories,
-`goto` will pick the first shallowest directory it finds.
+`goto` will search up to a depth of 4 for each basename.
+If multiple listings is found on any step,
+it'll filter out hidden directories and select the most recently modified directory.
 
 # License
 
