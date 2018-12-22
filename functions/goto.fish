@@ -4,32 +4,27 @@ function pkg-goto_trace
   end
 end
 
-function pkg-goto_depth
-  echo (echo "$argv[1]" | grep -o '/' | wc -l)
-end
-
-function pkg-goto_shallow_path
-  set -l d $argv[1]
-  set -l n (pkg-goto_depth $d)
-  pkg-goto_trace "#?$d"
-  for a in $argv[2..-1]
-    pkg-goto_trace "#?$a"
-    set -l m (pkg-goto_depth $a)
-    if test $m -lt $n
-      set n $m
-      set d $a
+function pkg-goto_find
+  set -l d ''
+  set -l n 1
+  while test $n -le 4
+    set d (find $argv[1] -mindepth $n -maxdepth $n -type d -name "$argv[2]")
+    if test (count $d) -gt 1
+      set pkg_goto_trace '1'
+      set d (ls -td $d | egrep -v '/\.' | head -1)
     end
+    if test -n "$d"
+      break
+    end
+    set n (math $n+1)
   end
   echo $d
 end
 
-function pkg-goto_goto_finds
+function pkg-goto_finds
   set -l d ~/
   for a in $argv
-    set d (find $d -maxdepth 3 -type d -name "$a" ^ /dev/null)
-    if test (count $d) -gt 1
-      set d (pkg-goto_shallow_path $d)
-    end
+    set d (pkg-goto_find $d $a)
     if test -z "$d"
       break
     end
@@ -38,7 +33,7 @@ function pkg-goto_goto_finds
 end
 
 function pkg-goto_found
-  set -l d (pkg-goto_goto_finds $argv)
+  set -l d (pkg-goto_finds $argv)
   if test -n "$d"
     if builtin cd $d[1]
       pkg-goto_trace "#"(pwd)
