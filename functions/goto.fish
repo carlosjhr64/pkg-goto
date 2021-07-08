@@ -4,6 +4,28 @@ function pkg-goto_trace
   end
 end
 
+function pkg-goto_env
+  set -l d ''
+  set -l base $argv[1]
+  set -l key $argv[2]
+  if string match --quiet --regex '^\w+$' "$key"
+    for path in $$key
+      if test -d "$base$path"
+        set d "$base$path"
+        break
+      else
+        if test "$base" = "$HOME/"
+          if test -d "$path"
+            set d "$path"
+            break
+          end
+        end
+      end
+    end
+  end
+  echo $d
+end
+
 function pkg-goto_find
   set -l d ''
   set -l n 1
@@ -17,6 +39,9 @@ function pkg-goto_find
       break
     end
     set n (math $n+1)
+  end
+  if test -z "$d"
+    set d (pkg-goto_env $argv)
   end
   echo $d
 end
@@ -58,7 +83,7 @@ function goto
   set -l error ''
   if argparse --name=goto 'h/help' 'v/version' 't/trace' -- $argv
     if test -n "$_flag_version"
-      echo '1.0.0'
+      echo '1.1.0'
     else if test -n "$_flag_help"
       echo 'Usage: goto [-t --trace] <basename>...'
     else
