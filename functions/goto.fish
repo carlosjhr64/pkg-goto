@@ -83,7 +83,7 @@ function goto
   set -l error ''
   if argparse --name=goto 'h/help' 'v/version' 't/trace' -- $argv
     if test -n "$_flag_version"
-      echo '1.1.0'
+      echo '1.2.0'
     else if test -n "$_flag_help"
       echo 'Usage: goto [-t --trace] <basename>...'
     else
