@@ -30,7 +30,7 @@ function pkg-goto_find
   set -l d ''
   set -l n 1
   while test $n -le 4
-    set d (find $argv[1] -mindepth $n -maxdepth $n -type d -name "$argv[2]")
+    set d (find -L $argv[1] -mindepth $n -maxdepth $n -type d -name "$argv[2]")
     if test (count $d) -gt 1
       set pkg_goto_trace '1'
       set d (ls -td $d | egrep -v '/\.' | head -1)

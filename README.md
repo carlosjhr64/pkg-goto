@@ -4,7 +4,7 @@ A plugin for [Fisherman](https://github.com/jorgebucaran/fisher) version v3.
 
 ## Install
 
-    fisher add carlosjhr64/pkg-goto
+    fisher install carlosjhr64/pkg-goto
 
 ## Features
 
