@@ -1,6 +1,6 @@
 # pkg-goto
 
-A plugin for [Fisherman](https://github.com/jorgebucaran/fisher) version v3.
+A plugin for [Fisherman](https://github.com/jorgebucaran/fisher) version 4.
 
 ## Install
 
