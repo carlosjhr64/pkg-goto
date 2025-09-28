@@ -2,36 +2,34 @@
 
 A plugin for [Fisherman](https://github.com/jorgebucaran/fisher) version 4.
 
+Requires a working `ruby` command on the system.
+
 ## Install
 
     fisher install carlosjhr64/pkg-goto
 
 ## Features
 
-* Quickly change directory by basename.
-* Runs `fish_greeting` on succesfully going to the directory.
+* Quickly change directory by `basename`.
+* Runs `fish_greeting` on successfully going to the directory.
 
 ## Usage
 
-    ~> goto <basename> [<basename>...]
+    ~> goto [<pattern>+]
 
-`goto` will search up to a depth of 4 for each basename.
-If multiple listings is found on any step,
-it'll filter out hidden directories and select the most recently modified directory.
+How `goto` actually filters your `HOME` directory listings
+is by the following Ruby Regexp:
 
-If no match is found for a basename, it'll check if it can be intepreted
-as an enviroment variable, translate, and try again.
-```shell
-$ goto --trace .local nvim pack                                                                                            11:11:59
-#/home/fox/.local/share/nvim/site/pack
-$ pwd
-/home/fox/.local/share/nvim/site/pack
-$ echo $VIMDATA
-/home/fox/.local/share/nvim
-$ goto VIMDATA pack
-$ pwd
-/home/fox/.local/share/nvim/site/pack
-```
+    pattern = ARGV.map{ it.gsub(".", "[.]") }.join(".*")
+    regexp  = %r(#{pattern}/$)
+
+The shortest length path of the filtered list is picked.
+If any of the patterns contains a dot, hidden directories will be included.
+
+If given a single pattern that can be interpreted as
+an environment variable set to an existing path,
+it'll `goto` that path.
+
 # License
 
 [MIT](http://opensource.org/licenses/MIT) © CarlosJHR64
