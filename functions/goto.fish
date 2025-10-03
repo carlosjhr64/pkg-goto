@@ -9,13 +9,17 @@ if ARGV.length == 1 && (pth = ENV[ARGV[0]]) && File.directory?(pth)
   exit
 end
 
-flags = ARGV.any? { /^\./.match?(it) } ? IO::FNM_DOTMATCH : 0
-
 # Set dir:
-File.directory?(_ = "#{dir = ENV["HOME"]}/#{ARGV[0]}") && (dir = _)
+if File.directory?(_ = "#{dir = ENV["HOME"]}/#{ARGV[0]}")
+  dir = _
+  unless ARGV[1]
+    puts dir
+    exit
+  end
+end
 
+flags   = ARGV.any? { /^\./.match?(it) } ? IO::FNM_DOTMATCH : 0
 pattern = ARGV.map{ it.gsub(".", "[.]") }.join(".*")
-
 regexp  = %r(#{pattern}/$)
 
 puts Dir.glob("#{dir}/**/*/", sort: false, flags: flags)
@@ -51,7 +55,7 @@ function goto
   set --local error '' # Set to '1' to indicate error.
   if argparse --name=goto 'h/help' 'v/version' -- $argv
     if test -n "$_flag_version"
-      echo '2.1.0'
+      echo '2.1.1'
     else if test -n "$_flag_help"
       echo 'Usage: goto <basename>...'
     else
